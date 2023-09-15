@@ -1,20 +1,35 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
+                <div class="card-header">Laravel Authentication Log</div>
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">IP Address</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Login at</th>
+                            <th scope="col">Login Successfully</th>
+                            <th scope="col">Logout at</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($logs as $key => $item)
+                            <tr>
+                                <th scope="row">{{ ++$key }}</th>
+                                <td>{{ $item['ip_address'] }}</td>
+                                <td>{{ $item->location ? $item->location['city'] : '-' }}</td>
+                                <td>{{ Carbon\Carbon::parse($item['login_at'])->isoFormat('D MMMM YYYY h:mm A') }}</td>
+                                <td>{{ $item['login_successful'] ? 'Yes' : 'No' }}</td>
+                                <td>{{ $item['logout_at'] ? Carbon\Carbon::parse($item->logout_at)->isoFormat('D MMMM YYYY h:mm A') : '-' }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
